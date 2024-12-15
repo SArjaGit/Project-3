@@ -1,5 +1,8 @@
+# Install necessary libraries
+# !pip install torch diffusers transformers pillow
+
 import torch
-from diffusers import StableDiffusionPipeline
+from diffusers import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
 from transformers import AutoFeatureExtractor
 from PIL import Image
@@ -17,11 +20,13 @@ class StableDiffusionModel:
         print(f"Using device: {self.device}")
 
         # Load the safety checker and feature extractor
-        safety_checker = StableDiffusionSafetyChecker.from_pretrained('CompVis/stable-diffusion-safety-checker')
-        feature_extractor = AutoFeatureExtractor.from_pretrained('CompVis/stable-diffusion-safety-checker')
+        safety_checker = StableDiffusionSafetyChecker.from_pretrained(
+            'CompVis/stable-diffusion-safety-checker')
+        feature_extractor = AutoFeatureExtractor.from_pretrained(
+            'CompVis/stable-diffusion-safety-checker')
 
         # Load the model
-        self.pipeline = StableDiffusionPipeline.from_pretrained(
+        self.pipeline = StableDiffusionXLPipeline.from_pretrained(
             model_name,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             safety_checker=safety_checker,
@@ -31,6 +36,7 @@ class StableDiffusionModel:
         # Optional: Enable memory-efficient attention
         if self.device == "cuda":
             self.pipeline.enable_xformers_memory_efficient_attention()
+
     def generate_image(
         self,
         prompt,
@@ -66,11 +72,12 @@ class StableDiffusionModel:
         except Exception as e:
             print(f"Image generation error: {e}")
             return None
+
     def image_to_image(
         self,
         init_image,
         prompt,
-        strength=0.75,
+        strength=0.0,
         guidance_scale=7.5
     ):
         """
@@ -85,7 +92,6 @@ class StableDiffusionModel:
         """
         try:
             # Ensure image is right size
-            init_image = init_image.resize((512, 512))
             # Image-to-image transformation
             transformed_image = self.pipeline(
                 prompt=prompt,
@@ -97,6 +103,8 @@ class StableDiffusionModel:
         except Exception as e:
             print(f"Image-to-image transformation error: {e}")
             return None
+
+
 def main():
     # Example usage
     model = StableDiffusionModel(
@@ -114,12 +122,15 @@ def main():
         generated_image.save("generated_landscape.png")
     # Optional: Image-to-image transformation
     # Load an existing image
-    init_image = Image.open("existing_image.jpg")
+    init_image = Image.open(
+        "/Users/stefan/Documents/AI Bootcamp/Project-3/source_data/stefan_photo.jpg")
     transformed_image = model.image_to_image(
         init_image,
         prompt="Transform this image to look like a watercolor painting"
     )
     if transformed_image:
         transformed_image.save("transformed_image.png")
+
+
 if __name__ == "__main__":
     main()
