@@ -106,7 +106,7 @@ class HairMaskPipeline:
 
     def apply_hair_color(self, image_path, mask_path, prompt,
                          output_path="output/edited_image.png",
-                         strength=0.5, guidance_scale=7.5):
+                         strength=0.1, guidance_scale=7.5):
         """
         Apply a new hair color to an image using Stable Diffusion's
         inpainting pipeline.
