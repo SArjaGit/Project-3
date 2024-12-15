@@ -3,11 +3,12 @@ import cv2
 from PIL import Image
 import numpy as np
 from diffusers import StableDiffusionInpaintPipeline
+from diffusers import AutoPipelineForInpainting
 import torch
 
 
 class HairMaskPipeline:
-    def __init__(self, model_name="runwayml/stable-diffusion-inpainting",
+    def __init__(self, model_name="stabilityai/stable-diffusion-xl-base-1.0",
                  device="cuda" if torch.cuda.is_available() else "cpu"):
         """
         Initialize the Stable Diffusion inpainting pipeline.
@@ -17,11 +18,11 @@ class HairMaskPipeline:
             device (str): Device to run the pipeline on ("cuda" or "cpu").
         """
         self.device = device
-        self.pipe = StableDiffusionInpaintPipeline.from_pretrained(model_name)
+        self.pipe = AutoPipelineForInpainting.from_pretrained(model_name)
         self.pipe.to(device)
         self.mp_selfie_segmentation = (
             mp.solutions.selfie_segmentation.SelfieSegmentation(
-                model_selection=1)
+          model_selection=1)
         )
 
     def generate_hair_mask(self, image_path, output_mask_path="hair_mask.png"):
@@ -44,14 +45,18 @@ class HairMaskPipeline:
         # Get the segmentation mask
         result = self.mp_selfie_segmentation.process(image_rgb)
         mask = result.segmentation_mask
-        binary_mask = (mask < 0.1).astype(np.uint8) * \
-            255  # Threshold hair region
+        binary_mask = (mask > 0.1).astype(np.uint8) * 255  # Threshold hair region
 
-        # Resize the mask to match 512x512 resolution
-        binary_mask = cv2.resize(binary_mask, (512, 512))
+        height, width = binary_mask.shape
+        hair_mask = np.zeros_like(binary_mask)
+        upper_head_region = binary_mask[:height // 3, :]
+        hair_mask[:height // 3, :] = upper_head_region
+
+        kernal = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        hair_mask = cv2.morphologyEx(hair_mask, cv2.MORPH_CLOSE, kernal)
 
         # Save the mask
-        cv2.imwrite(output_mask_path, binary_mask)
+        cv2.imwrite(output_mask_path, hair_mask)
         print(f"Hair mask saved to: {output_mask_path}")
         return output_mask_path
 
@@ -100,9 +105,9 @@ class HairMaskPipeline:
 
         return square_image
 
-    def apply_hair_color(self, image_path, mask_path, prompt, 
-                         output_path="output/edited_image.png", 
-                         strength=0.75, guidance_scale=7.5):
+    def apply_hair_color(self, image_path, mask_path, prompt,
+                         output_path="output/edited_image.png",
+                         strength=0.5, guidance_scale=7.5):
         """
         Apply a new hair color to an image using Stable Diffusion's
         inpainting pipeline.
@@ -118,7 +123,8 @@ class HairMaskPipeline:
         Returns:
             str: Path to the modified image.
         """
-        self.preprocess_image_for_stable_diffusion(image_path, save_path=image_path)
+        self.preprocess_image_for_stable_diffusion(
+            image_path, save_path=image_path)
         # Load the original image and the hair mask
         original_image = Image.open(image_path).convert(
             "RGB")
