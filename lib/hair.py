@@ -2,7 +2,6 @@ import mediapipe as mp
 import cv2
 from PIL import Image
 import numpy as np
-from diffusers import StableDiffusionInpaintPipeline
 from diffusers import AutoPipelineForInpainting
 import torch
 
