@@ -20,7 +20,8 @@ def set_hair_color(color_name, input_image_path):
 
     hair_mask_pipeline = HairMaskPipeline()
     input_image_cv = cv2.imread(input_image_path, cv2.IMREAD_UNCHANGED)
-    hair_mask_path = hair_mask_pipeline.generate_hair_mask(image_path=input_image_path, output_mask_path='output/masks/hair_mask.png')
+    hair_mask_path = hair_mask_pipeline.generate_hair_mask(
+        image_path=input_image_path, output_mask_path='output/masks/hair_mask.png')
 
     print('Hair mask generated at', hair_mask_path)
     hair_mask_cv = cv2.imread(hair_mask_path, cv2.IMREAD_GRAYSCALE)
