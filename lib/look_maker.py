@@ -1,4 +1,4 @@
-from hair import HairMaskPipeline
+from lib.hair import HairMaskPipeline
 import cv2
 import numpy as np
 import webcolors
@@ -16,9 +16,13 @@ def store_image_and_generate_mask(input_image_path):
     return hair_mask_path
 
 
-def set_hair_color(color_name, input_image_path, hair_mask_path):
+def set_hair_color(color_name, input_image_path):
 
+    hair_mask_pipeline = HairMaskPipeline()
     input_image_cv = cv2.imread(input_image_path, cv2.IMREAD_UNCHANGED)
+    hair_mask_path = hair_mask_pipeline.generate_hair_mask(image_path=input_image_path, output_mask_path='output/masks/hair_mask.png')
+
+    print('Hair mask generated at', hair_mask_path)
     hair_mask_cv = cv2.imread(hair_mask_path, cv2.IMREAD_GRAYSCALE)
 
     # Add an alpha channel to the input image if it doesn't have one
@@ -59,5 +63,5 @@ class look_maker:
         # Initialize any attributes or parameters
         pass
 
-    def hair_transform(selected_color, image_path):
+    def hair_transform(self, selected_color, image_path):
         return set_hair_color(selected_color, image_path)
