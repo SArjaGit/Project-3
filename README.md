@@ -22,6 +22,10 @@ Beyond Salon is a web application that allows users to upload an image and selec
 - Select a hair color from a dropdown menu.
 - See the transformed image with the selected hair color.
 
+## Notes
+
+- On first run of the software, it will download the sam_vit_h_4b8939.pth file to be used with SegmentAnything.  It is a 2gb file and may take some time to download.
+
 ## Requirements
 
 - Python 3.7+
@@ -36,8 +40,8 @@ Beyond Salon is a web application that allows users to upload an image and selec
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/beyond-salon.git
-    cd beyond-salon
+    git clone https://github.com/SArjaGit/Beyond-Salon.git
+    cd Beyond-Salon
     ```
 
 2. Create a virtual environment and activate it:
