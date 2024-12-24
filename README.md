@@ -18,7 +18,7 @@ Beyond Salon is a web application that allows users to upload an image and selec
 
 ## Features
 
-- Upload an image of yourself.
+- Upload an image of yourself (we suggest a photograph closely-cropped to your head).
 - Select a hair color from a dropdown menu.
 - See the transformed image with the selected hair color.
 
