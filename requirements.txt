@@ -4,4 +4,5 @@ opencv_python==4.10.0.84
 Requests==2.32.3
 segment_anything==1.0
 torch==2.5.1
+torchvision==0.20.1
 webcolors==24.11.1
