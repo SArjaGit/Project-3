@@ -1,0 +1,7 @@
+numpy==2.2.1
+opencv_contrib_python==4.10.0.84
+opencv_python==4.10.0.84
+Requests==2.32.3
+segment_anything==1.0
+torch==2.5.1
+webcolors==24.11.1

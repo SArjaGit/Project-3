@@ -36,8 +36,8 @@ Beyond Salon is a web application that allows users to upload an image and selec
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/beyond-salon.git
-    cd beyond-salon
+    git clone https://github.com/SArjaGit/Beyond-Salon.git
+    cd Beyond-Salon
     ```
 
 2. Create a virtual environment and activate it:
