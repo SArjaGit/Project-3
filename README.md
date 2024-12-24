@@ -9,8 +9,8 @@ Beyond Salon is a web application that allows users to upload an image and selec
 - Used existing models from segment_anything and diffusers
   
 ## Files
-* [Gradio_UI.ipynb] - User Interface for handling the input and applying the transformation 
-* [hair.py] - main class that creates the hair mask and applies transformation
+* [Gradio_UI.ipynb](https://github.com/SArjaGit/Project-3/blob/Read-me-Branch/Gradio_UI.ipynb) - User Interface for handling the input and applying the transformation 
+* [hair.py](https://github.com/SArjaGit/Project-3/blob/main/lib/hair.py) - main class that creates the hair mask and applies transformation
 * [/lib](https://github.com/mcalabrese98/project2/tree/main/lib) - Houses the python library files
 * [/source_data](https://github.com/mcalabrese98/project2/tree/main/source_data) - All the source data files are stored here
 
